@@ -17,7 +17,7 @@ Additionally, this project will include
 
 This app will consist of one screen with an about section. On entry, the user will see the population density map and the about section on the side. On the bottom, the user will be able to click additional maps.
 
-![wireframe][images/DataViz.png]
+![wireframe](images/DataViz.png)
 
 ### Architecture and Technologies
 
@@ -45,7 +45,7 @@ Goals for the day:
 Goals for the day:
 
 - Allow for users to toggle between maps
-- Write about section
+- Write 'about' section
 
 **Day 4**: Styling and cleaning up
 
