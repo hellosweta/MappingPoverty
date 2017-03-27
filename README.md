@@ -54,7 +54,7 @@ Goals for the day:
 
 ### Bonus Features:
 
-- Allow users to hover over data points and see data
+- Allow users to hover over data points and see data allowing for an interactive map using the Leaflet library 
 - Display different poverty measures
 - Add health insurance coverage to allow users to relate coverage and poverty  
 - Add maps show population and poverty in 2010 to show change over time
