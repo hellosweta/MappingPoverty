@@ -1,0 +1,20 @@
+.about-modal{
+  display: flex;
+  border: 1px solid #000084;
+  float: right;
+  padding: 10px 10px;
+
+}
+.map{
+  border: 1px solid 000084;
+}
+
+.counties {
+  fill: none;
+}
+
+.states {
+  fill: none;
+  stroke: #fff;
+  stroke-linejoin: round;
+}
