@@ -181,11 +181,14 @@ const ready = (error, us) => {
     .data(topojson.feature(us, us.objects.counties).features)
     .enter().append("path")
       .attr("fill", d => {
+        d.county = PovertyEstimates.get(`County${d.id}`)
+        d.state = PovertyEstimates.get(`State${d.id}`)
         return color(d.rate = PovertyEstimates.get(d.id)) })
       .attr("d", path)
     .append("title")
       .text(d => {
-        return(`${PovertyEstimates.get("County")}, ${PovertyEstimates.get("State")} Poverty Rate: ${d.rate}%`)
+        return(`${d.county}, ${d.state}
+        Poverty Rate: ${d.rate}%`)
       })
     // .on("mouseover", function(d) {
     //   d3.select(this).transition().duration(300).style("opacity", 1)
@@ -196,13 +199,13 @@ const ready = (error, us) => {
     //   .style("top", (d3.event.pageY -30) + "px");
     // })
 
-    g.append("g")
-       .attr("id", "states")
-     .selectAll("path")
-       .data(topojson.feature(us, us.objects.states).features)
-     .enter().append("path")
-       .attr("d", path)
-       .on("click", clicked);
+    // g.append("g")
+    //    .attr("id", "states")
+    //  .selectAll("path")
+    //    .data(topojson.feature(us, us.objects.states).features)
+    //  .enter().append("path")
+    //    .attr("d", path)
+    //    .on("click", clicked);
   svg.append("path")
       .datum(topojson.mesh(us, us.objects.states, (a, b) => ( a !== b ) ))
       .attr("class", "states")
@@ -238,10 +241,40 @@ const ready = (error, us) => {
 d3.queue()
   .defer(d3.json, "https://d3js.org/us-10m.v1.json")
   .defer(d3.tsv, "../data/PovertyEstimates.tsv", d => {
-    return (PovertyEstimates.set(d.id, d.rate).set("State", d.State).set("County", d.Area_Name))
+    return (PovertyEstimates.set(d.id, d.rate).set(`State${d.id}`, d.State).set(`County${d.id}`, d.Area_Name))
 
   })
   .await(ready);
+
+  function clicked(d) {
+    if (active.node() === this) return reset();
+    active.classed("active", false);
+    active = d3.select(this).classed("active", true);
+
+    var bounds = path.bounds(d),
+        dx = bounds[1][0] - bounds[0][0],
+        dy = bounds[1][1] - bounds[0][1],
+        x = (bounds[0][0] + bounds[1][0]) / 2,
+        y = (bounds[0][1] + bounds[1][1]) / 2,
+        scale = .9 / Math.max(dx / width, dy / height),
+        translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+    g.transition()
+        .duration(750)
+        .style("stroke-width", 1.5 / scale + "px")
+        .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
+  }
+
+  function reset() {
+    active.classed("active", false);
+    active = d3.select(null);
+
+    g.transition()
+        .duration(750)
+        .style("stroke-width", "1.5px")
+        .attr("transform", "");
+  }
+
 
 </script>
 
