@@ -9,19 +9,22 @@
     <h2 class="subtitle">Using Census Small Area Income and Poverty Estimates (SAIPE) to Show Changes in Where the Poor Live</h2>
   </div>
 </head>
-<div class="content">
+<body>
+  <div class="content">
 
-<div class="wrapper">
-  <div id="map"></div>
-</div>
-<div class="about-modal">
-  <div id="tooltip">
-    <select id="dropdown"></select>
-      <h3><span id = "neighborhood">&nbsp;</span></h3>
-      <h5><span id = "datum">&nbsp;</span></h5>
+    <div class="wrapper">
+      <div id="map"></div>
+    </div>
+    <div class="about-modal">
+      <div id="tooltip">
+        <select id="dropdown"></select>
+        <h3><span id = "neighborhood">&nbsp;</span></h3>
+        <h5><span id = "datum">&nbsp;</span></h5>
+      </div>
+      <p class="about-text">Using d3.js and census data, this choropleth map shows the estimated percent of people of all ages in poverty. Use the dropdown above to toggle through years to see changing demographics through time. This project eventually aims to examine if poverty is becoming increasingly  concentrated in counties as able and educated workforce move to more urban areas</p>
+    </div>
   </div>
-</div>
-</div>
+</body>
 
 <!-- <script type="text/javascript" src="./lib/queue_func.js"> -->
 
@@ -61,7 +64,6 @@ const init = () => {
   setZoom();
   setKey();
   loadData(year)
-  processData();
 }
 const setMap = () => {
   width = 960;
@@ -107,14 +109,14 @@ const x = d3.scaleLinear()
 
 const color = d3.scaleThreshold()
     // .domain(d3.range(3, 50))
-    .domain([0, 10, 20, 30, 40])
-    .range(d3.schemePuBuGn[5]);
+    .domain([10, 20, 30, 40, 60])
+    .range(d3.schemeBuPu[5]);
 
 
 const setKey = () => {
   const g = svg.append("g")
   .attr("class", "key")
-  .attr("transform", "translate(0,40)")
+  .attr("transform", "translate(0,23)")
 
   g.selectAll("rect")
   .data(color.range().map( d => {
@@ -166,61 +168,49 @@ const dropDown = d3.select("#dropdown");
 });
 
 const processData = (error, us) => {
-  // if (error) throw error;
-
+  if (error) throw error;
   svg.append("g")
     .attr("class", "counties")
     .selectAll("path")
     .data(topojson.feature(us, us.objects.counties).features)
     .enter().append("path")
-    .attr("class", "feature")
-    .on("click", clicked)
-    // .transition()
-    // .duration(700)
     .attr("fill", d => {
       d.county = PovertyEstimates.get(`County${d.id}`)
       d.state = PovertyEstimates.get(`State${d.id}`)
-      return color(d.rate = PovertyEstimates.get(d.id)) })
-    .attr("d", path)
+      return color(d.rate = PovertyEstimates.get(d.id))
+    }).attr("d", path)
     .on("mouseover", (d) =>  displayData(d))
     .on("mouseout", hideData())
     .append("title")
-    .text(d => {
-      return(`${d.county}, ${d.state}
-      Poverty Rate: ${d.rate}%`)
-    })
+    .text(d => `${d.county}, ${d.state} Poverty Rate: ${d.rate}%`)
 
 
   svg.append("path")
       .datum(topojson.mesh(us, us.objects.states, (a, b) => ( a !== b ) ))
       .attr("class", "states")
+      .on("click", clicked)
       .attr("d", path)
 
 }
 const displayData = (d) => {
-
   d3.select("#neighborhood")
-              .text(`${d.county}, ${d.state}`)
-
+    .text(`${d.county}, ${d.state}`)
   d3.select("#datum")
    .text(`Poverty Rate: ${d.rate}%`);
 }
 
 const hideData = () => {
   d3.select("#neighborhood")
-           .text("\u00A0");
+    .text("\u00A0");
 
   d3.select("#datum")
-           .text("\u00A0");
+    .text("\u00A0");
 }
 const loadData = (year) => {
   let key = `rate${year}`
   d3.queue()
   .defer(d3.json, "https://d3js.org/us-10m.v1.json")
-  .defer(d3.tsv, "./data/dummydata.tsv", d => {
-    return (PovertyEstimates.set(d.id, d[key]).set(`State${d.id}`, d.State).set(`County${d.id}`, d.Area_Name))
-    // makes map ^^
-  })
+  .defer(d3.tsv, "./data/dummydata.tsv", d => (PovertyEstimates.set(d.id, d[key]).set(`State${d.id}`, d.State).set(`County${d.id}`, d.Area_Name)))
   .await(processData);
 
 }
