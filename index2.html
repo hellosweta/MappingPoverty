@@ -32,7 +32,6 @@
   <!-- <script src="./lib/d3.geo.zoom.js"></script> -->
   <script src="https://d3js.org/d3-array.v1.min.js"></script>
   <script src="./lib/d3.scale.chromatic.v1.min.js"></script>
-  <script src="./lib/queue.js"></script>
   <script src="https://d3js.org/d3-color.v1.min.js"></script>
 <script src="https://d3js.org/d3-dispatch.v1.min.js"></script>
 <script src="https://d3js.org/d3-ease.v1.min.js"></script>
@@ -45,11 +44,6 @@
   <!-- <script src="./js/main.js"></script> -->
 
 <script type="text/javascript">
-// create an svg element
-
-// var zoom = d3.behavior.zoom()
-//     .scaleExtent([1, 10])
-//     .on("zoom", zoomed);
 
 let width;
 let height;
@@ -58,11 +52,13 @@ let path;
 let graticule;
 let svg;
 let year = 2015;
-// let attributeArray = []currentAttribute = 0, playing = false;
+let z;
+let active = d3.select(null);
 
 const init = () => {
   setMap();
   populationDropdown();
+  setZoom();
   setKey();
   loadData(year)
   processData();
@@ -72,12 +68,33 @@ const setMap = () => {
   height = 600;
   svg = d3.select("#map").append("svg")
   .attr("width", width)
-  .attr("height", height);
+  .attr("height", height)
+  .on("click", stopped, true);
+
+
+svg.append("rect")
+    .attr("class", "background")
+    .attr("width", width)
+    .attr("height", height)
+    .on("click", reset);
 
 }
 
-// const width = svg.attr("width");
-// const height = svg.attr("height");
+const zoomed = () => {
+  console.log("zoomed");
+  z.style("stroke-width", 1.5 / d3.event.transform.k + "px");
+  z.attr("transform", d3.event.transform);
+}
+const zoom = () => {
+  d3.zoom()
+  .scaleExtent([1,8])
+  .on("zoom", zoomed)
+}
+
+const setZoom = () => {
+  z = svg.append("z")
+  svg.call(zoom)
+}
 
 
 const PovertyEstimates = d3.map();
@@ -156,6 +173,8 @@ const processData = (error, us) => {
     .selectAll("path")
     .data(topojson.feature(us, us.objects.counties).features)
     .enter().append("path")
+    .attr("class", "feature")
+    .on("click", clicked)
     // .transition()
     // .duration(700)
     .attr("fill", d => {
@@ -198,37 +217,46 @@ const loadData = (year) => {
   let key = `rate${year}`
   d3.queue()
   .defer(d3.json, "https://d3js.org/us-10m.v1.json")
-  .defer(d3.tsv, "../data/dummydata.tsv", d => {
+  .defer(d3.tsv, "./data/dummydata.tsv", d => {
     return (PovertyEstimates.set(d.id, d[key]).set(`State${d.id}`, d.State).set(`County${d.id}`, d.Area_Name))
     // makes map ^^
   })
   .await(processData);
 
 }
-// function animateMap() {
-//   const timer;  // create timer object
-//   d3.select('#play')
-//     .on('click', function() {  // when user clicks the play button
-//       if (playing == false) {  // if the map is currently playing
-//         timer = setInterval(function(){   // set a JS interval
-//           if(currentAttribute < attributeArray.length-1) {
-//               currentAttribute +=1;  // increment the current attribute counter
-//           } else {
-//               currentAttribute = 0;  // or reset it to zero
-//           }
-//           sequenceMap();  // update the representation of the map
-//           d3.select('#clock').html(attributeArray[currentAttribute]);  // update the clock
-//         }, 2000);
-//
-//         d3.select(this).html('stop');  // change the button label to stop
-//         playing = true;   // change the status of the animation
-//       } else {    // else if is currently playing
-//         clearInterval(timer);   // stop the animation by clearing the interval
-//         d3.select(this).html('play');   // change the button label to play
-//         playing = false;   // change the status again
-//       }
-//   });
-// }
+function clicked(d) {
+  if (active.node() === this) return reset();
+  active.classed("active", false);
+  active = d3.select(this).classed("active", true);
+
+  var bounds = path.bounds(d),
+      dx = bounds[1][0] - bounds[0][0],
+      dy = bounds[1][1] - bounds[0][1],
+      x = (bounds[0][0] + bounds[1][0]) / 2,
+      y = (bounds[0][1] + bounds[1][1]) / 2,
+      scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height))),
+      translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+  svg.transition()
+      .duration(750)
+      // .call(zoom.translate(translate).scale(scale).event); // not in d3 v4
+      .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); // updated for d3 v4
+}
+
+function reset() {
+  active.classed("active", false);
+  active = d3.select(null);
+
+  svg.transition()
+      .duration(750)
+      // .call( zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1) ); // not in d3 v4
+      .call( zoom.transform, d3.zoomIdentity ); // updated for d3 v4
+}
+
+function stopped() {
+  if (d3.event.defaultPrevented) d3.event.stopPropagation();
+}
+
 
 window.onload = init();
 

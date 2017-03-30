@@ -80,10 +80,18 @@ div.tooltip {
   font-size: 22px;
   color: blue;
 }
-
 .background {
   fill: none;
   pointer-events: all;
+}
+
+.feature {
+
+  cursor: pointer;
+}
+
+.feature.active {
+  fill: orange;
 }
 
 #wrapper {
