@@ -5,7 +5,13 @@
 </head>
 <div class="">
   <div id="map"></div>
-  <button id="play" type="button" name="button"></button>
+  <select id ="play" name="dropdown">
+    <option value="2015">2015</option>
+    <option value="2014">2014</option>
+    <option value="mercedes">2013</option>
+    <option value="audi">2012</option>
+</select>
+
   <span id="clock">year</span>
 </div>
 <div class="about-modal">
@@ -46,6 +52,7 @@ let projection;
 let path;
 let graticule;
 let svg;
+let year = 2015;
 // let attributeArray = []currentAttribute = 0, playing = false;
 
 const init = () => {
@@ -150,10 +157,11 @@ const processData = (error, us) => {
 }
 
 const loadData = () => {
+  let key = `rate${year}`
   d3.queue()
   .defer(d3.json, "https://d3js.org/us-10m.v1.json")
   .defer(d3.tsv, "../data/PovertyEstimates.tsv", d => {
-    return (PovertyEstimates.set(d.id, d.rate).set(`State${d.id}`, d.State).set(`County${d.id}`, d.Area_Name))
+    return (PovertyEstimates.set(d.id, d[key]).set(`State${d.id}`, d.State).set(`County${d.id}`, d.Area_Name))
     // makes map ^^
   })
   .await(processData);
