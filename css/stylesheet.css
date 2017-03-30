@@ -5,12 +5,16 @@
   flex-direction: column;
   border-bottom: 1px solid grey;
   padding-bottom: 20px;
+  width: 100%;
 }
 
 .body{
   font-family: 'Lora', serif;
 }
-
+.content{
+  display: flex;
+  flex-direction: column;
+}
 .title{
   font-size: 30px;
   text-align: center;
@@ -21,11 +25,11 @@
   text-align: center;
 }
 #dropdown{
-  margin: 50px;
+  margin: 30px;
   border: 1px solid #111;
   background: transparent;
-  width: 150px;
-  padding: 5px 35px 5px 10px;
+  width: 100px;
+  padding: 5px 35px 10px 20px;
   font-size: 16px;
   border: 1px solid #ccc;
   height: 34px;
@@ -35,11 +39,11 @@
   background: url(https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Caret_down_font_awesome.svg/2000px-Caret_down_font_awesome.svg.png) 96% / 15% no-repeat #eee;
 }
 .about-modal{
-  display: flex;
+  float: right;
   border: 1px solid #000084;
   float: right;
   padding: 10px 10px;
-
+  width: 33%;
 }
 .map{
   border: 1px solid 000084;
@@ -61,31 +65,46 @@ div.tooltip {
   text-align: center;
   width: 150px;
   height: 25px;
-  padding: 2px;
+  padding: 5px 10px;
   font-size: 10px;
-  background: #FFFFE0;
+  background: white;
   border: 1px;
   border-radius: 8px;
   pointer-events: none;
+  background: #5E5E5E;
+  z-index: 1;
+  float: left;
 }
 
 .caption {
   font-size: 22px;
   color: blue;
 }
+
 .background {
   fill: none;
   pointer-events: all;
 }
 
 #wrapper {
-         width: 960px;
-         margin: -30px auto 0;
-     }
+  width: 66%;
+  margin: -30px auto 0;
+  display: flex;
+  font-family: 'Lora', serif;
+}
+#neighborhood{
+  font-size: 15px;
+  padding: 5px 0px;
+}
+#datum{
+  font-size: 13px;
+  padding: 5px 0px;
+}
 #map {
    width: 960px;
    height: 580px;
    position: relative;
+   left: 1
 }
  .stroke {
    fill: none;
@@ -127,3 +146,6 @@ div.tooltip {
  #clock {
    left: 65px;
  }
+text.caption{
+    font-family: 'Lora', serif;
+}

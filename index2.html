@@ -9,18 +9,20 @@
     <h2 class="subtitle">Using Census Small Area Income and Poverty Estimates (SAIPE) to Show Changes in Where the Poor Live</h2>
   </div>
 </head>
-<div class="">
-   <select id="dropdown"></select>
-   <div id = "tooltip">
-       <h3><span id = "neighborhood">&nbsp;</span></h3>
-       <h5><span id = "datum">&nbsp;</span></h5>
-   </div>
+<div class="content">
+
+<div class="wrapper">
   <div id="map"></div>
 </div>
 <div class="about-modal">
-  <h1>About</h1>
+  <div id="tooltip">
+    <select id="dropdown"></select>
+      <h3><span id = "neighborhood">&nbsp;</span></h3>
+      <h5><span id = "datum">&nbsp;</span></h5>
+  </div>
 </div>
-<svg width="960" height="600" class-"us-map"></svg>
+</div>
+
 <!-- <script type="text/javascript" src="./lib/queue_func.js"> -->
 
 </script>
@@ -89,7 +91,7 @@ const x = d3.scaleLinear()
 const color = d3.scaleThreshold()
     // .domain(d3.range(3, 50))
     .domain([0, 10, 20, 30, 40])
-    .range(d3.schemeBlues[5]);
+    .range(d3.schemePuBuGn[5]);
 
 
 const setKey = () => {
