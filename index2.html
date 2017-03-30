@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <head>
+  <link rel="stylesheet" type="text/css" href="./css/reset.css">
   <link rel="stylesheet" type="text/css" href="./css/stylesheet.css">
+  <link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
+  <div class="nav-bar">
+    <h1 class="title">Mapping Poverty in America</h1>
+    <h2 class="subtitle">Using Census Small Area Income and Poverty Estimates (SAIPE) to Show Changes in Where the Poor Live</h2>
+  </div>
 </head>
 <div class="">
-  <!-- dropdown -->
    <select id="dropdown"></select>
-
-   <!-- neighborhood and its value -->
    <div id = "tooltip">
        <h3><span id = "neighborhood">&nbsp;</span></h3>
        <h5><span id = "datum">&nbsp;</span></h5>
    </div>
-
-
   <div id="map"></div>
-
-
-  <span id="clock">year</span>
 </div>
 <div class="about-modal">
   <h1>About</h1>
@@ -64,7 +62,7 @@ const init = () => {
   setMap();
   populationDropdown();
   setKey();
-  loadData(year);
+  loadData(year)
   processData();
 }
 const setMap = () => {
@@ -90,7 +88,7 @@ const x = d3.scaleLinear()
 
 const color = d3.scaleThreshold()
     // .domain(d3.range(3, 50))
-    .domain([5, 10, 20, 30, 40])
+    .domain([0, 10, 20, 30, 40])
     .range(d3.schemeBlues[5]);
 
 
@@ -130,7 +128,7 @@ const setKey = () => {
 
 }
 
-const years = [2011,2012, 2013, 2014, 2015]
+const years = [2015, 2014, 2013]
 
 const populationDropdown = () => {
   d3.select("#dropdown")
@@ -144,7 +142,7 @@ const populationDropdown = () => {
 const dropDown = d3.select("#dropdown");
   dropDown.on("change", () => {
   loadData(d3.event.target.value)
-  .processData()
+
 
 });
 
@@ -161,16 +159,21 @@ const processData = (error, us) => {
     .selectAll("path")
     .data(topojson.feature(us, us.objects.counties).features)
     .enter().append("path")
+    // .transition()
+    // .duration(700)
     .attr("fill", d => {
       d.county = PovertyEstimates.get(`County${d.id}`)
       d.state = PovertyEstimates.get(`State${d.id}`)
       return color(d.rate = PovertyEstimates.get(d.id)) })
     .attr("d", path)
+    .on("mouseover", (d) =>  displayData(d))
+    .on("mouseout", hideData())
     .append("title")
     .text(d => {
       return(`${d.county}, ${d.state}
       Poverty Rate: ${d.rate}%`)
     })
+
 
   svg.append("path")
       .datum(topojson.mesh(us, us.objects.states, (a, b) => ( a !== b ) ))
@@ -178,7 +181,22 @@ const processData = (error, us) => {
       .attr("d", path)
 
 }
+const displayData = (d) => {
 
+  d3.select("#neighborhood")
+              .text(`${d.county}, ${d.state}`)
+
+  d3.select("#datum")
+   .text(`Poverty Rate: ${d.rate}%`);
+}
+
+const hideData = () => {
+  d3.select("#neighborhood")
+           .text("\u00A0");
+
+  d3.select("#datum")
+           .text("\u00A0");
+}
 const loadData = (year) => {
   let key = `rate${year}`
   d3.queue()

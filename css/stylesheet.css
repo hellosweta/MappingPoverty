@@ -1,3 +1,39 @@
+.nav-bar{
+  font-family: 'Lora', serif;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  border-bottom: 1px solid grey;
+  padding-bottom: 20px;
+}
+
+.body{
+  font-family: 'Lora', serif;
+}
+
+.title{
+  font-size: 30px;
+  text-align: center;
+}
+
+.subtitle{
+  font-size: 15px;
+  text-align: center;
+}
+#dropdown{
+  margin: 50px;
+  border: 1px solid #111;
+  background: transparent;
+  width: 150px;
+  padding: 5px 35px 5px 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  height: 34px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url(https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Caret_down_font_awesome.svg/2000px-Caret_down_font_awesome.svg.png) 96% / 15% no-repeat #eee;
+}
 .about-modal{
   display: flex;
   border: 1px solid #000084;
