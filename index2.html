@@ -149,11 +149,6 @@ const dropDown = d3.select("#dropdown");
 const processData = (error, us) => {
   if (error) throw error;
 
-  svg.append("rect2")
-  .attr("class", "background")
-  .attr("width", width)
-  .attr("height", height)
-
   svg.append("g")
     .attr("class", "counties")
     .selectAll("path")
