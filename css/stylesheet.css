@@ -32,8 +32,25 @@
 rect.background{
   z-index: 1;
 }
+.links{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.github{
+  height: 40px;
+  width: auto;
+  padding: 5px 10px 10px;
+}
+
+.linkedin{
+  height: 43px;
+  width: auto;
+  padding: 5px 10px 10px;
+}
+
 #dropdown{
-  margin: 15px 15px 15px 20px;
+  margin: 0px 5px 5px 5px;
   background: transparent;
   fill: white;
   width: 100px;
@@ -44,7 +61,7 @@ rect.background{
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background: url(https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Caret_down_font_awesome.svg/2000px-Caret_down_font_awesome.svg.png) 96% / 15% no-repeat #eee;
+  background: url(https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Caret_down_font_awesome.svg/2000px-Caret_down_font_awesome.svg.png) 96% / 15% no-repeat #e6edf5;
 }
 .about-modal{
   display: flex;
@@ -138,7 +155,7 @@ div.tooltip {
 .prompt{
   font-size: 15px;
   font-style: italic;
-  
+
 }
 #datum{
   font-size: 13px;
