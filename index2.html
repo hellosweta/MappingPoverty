@@ -17,11 +17,12 @@
     </div>
     <div class="about-modal">
       <div id="tooltip">
-        <select id="dropdown"></select>
+
+        <select id="dropdown"><h3 class="year">Year</h3></select>
         <h3><span id = "neighborhood">&nbsp;</span></h3>
         <h5><span id = "datum">&nbsp;</span></h5>
       </div>
-      <p class="about-text">Using d3.js and census data, this choropleth map shows the estimated percent of people of all ages in poverty. Use the dropdown above to toggle through years to see changing demographics through time. This project eventually aims to examine if poverty is becoming increasingly  concentrated in counties as able and educated workforce move to more urban areas</p>
+      <p class="about-text">Using d3.js and census data, this choropleth map shows the estimated percent of people of all ages in poverty. Use the dropdown above to toggle through years to see changing demographics through time. This project examines counties with high rates of poverty. Does the percentage of people living in poverty increase over time in these counties? </p>
     </div>
   </div>
 </body>
@@ -32,7 +33,6 @@
   <script type="text/javascript" src="./lib/d3.v4.min.js"></script>
   <script src="./lib/topojson.v2.min.js"></script>
   <script src="https://d3js.org/d3-geo.v1.min.js"></script>
-  <!-- <script src="./lib/d3.geo.zoom.js"></script> -->
   <script src="https://d3js.org/d3-array.v1.min.js"></script>
   <script src="./lib/d3.scale.chromatic.v1.min.js"></script>
   <script src="https://d3js.org/d3-color.v1.min.js"></script>
@@ -116,7 +116,7 @@ const color = d3.scaleThreshold()
 const setKey = () => {
   const g = svg.append("g")
   .attr("class", "key")
-  .attr("transform", "translate(0,23)")
+  .attr("transform", "translate(20,27)")
 
   g.selectAll("rect")
   .data(color.range().map( d => {
@@ -135,7 +135,7 @@ const setKey = () => {
   .attr("class", "caption")
   .attr("x", x.range()[0])
   .attr("y", -10)
-  .attr("fill", "#000")
+  .attr("fill", "#fff")
   .attr("text-anchor", "start")
   .attr("font-weight", "bold")
   .text("Poverty Rate");
@@ -149,7 +149,7 @@ const setKey = () => {
 
 }
 
-const years = [2015, 2014, 2013]
+const years = [2015, 2014, 2013, 2012]
 
 const populationDropdown = () => {
   d3.select("#dropdown")

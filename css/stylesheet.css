@@ -13,6 +13,7 @@
 .content{
   display: flex;
   margin-top: 10px;
+  background: #585C6C;
 }
 .title{
   font-size: 30px;
@@ -20,22 +21,25 @@
 }
 .about-text{
   font-family: 'Lora', serif;
+  padding: 5px 35px 5px 20px;
 }
 .subtitle{
   font-size: 15px;
   text-align: center;
   padding-bottom: 15px;
-  border-bottom: 1px solid grey;
+  /*border-bottom: 1px solid grey;*/
 }
-
+rect.background{
+  z-index: 1;
+}
 #dropdown{
-  margin: 30px;
+  margin: 15px 15px 15px 30px;
   background: transparent;
   fill: white;
   width: 100px;
-  padding: 5px 35px 10px 20px;
+  padding: 5px 35px 5px 20px;
   font-size: 16px;
-  border: 1px solid blue;
+  border: 1px solid rgb(8, 81, 156);
   height: 34px;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -44,17 +48,24 @@
 }
 .about-modal{
   display: flex;
-  border: 1px solid #000084;
+  margin-top: 150px;
+  border: 3px solid #33658A;
   padding: 10px 10px;
   width: 25%;
   flex-direction: column;
+  border-radius: 10px;
+  background: white;
+  height: 400px;
+  background: #e6edf5;
 }
-.map{
+.map {
   border: 1px solid 000084;
 }
 
 .counties {
   fill: none;
+  stroke: #fff;
+  stroke-width: .3px;
 }
 
 .states {
@@ -103,14 +114,24 @@ div.tooltip {
   font-family: 'Lora', serif;
   width: 66%;
 }
+
 #neighborhood{
-  font-size: 15px;
-  padding: 5px 0px;
+  font-size: 17px;
+  font-weight: bold;
+  padding: 5px 0px 0px 20px;
   font-family: 'Lora', serif;
 }
+
+.year{
+  font-size: 17px;
+  font-weight: bold;
+  padding: 5px 0px 0px 20px;
+  font-family: 'Lora', serif;
+}
+
 #datum{
   font-size: 13px;
-  padding: 5px 0px;
+  padding: 0px 0px 0px 20px;
   font-family: 'Lora', serif;
 }
 #map {
