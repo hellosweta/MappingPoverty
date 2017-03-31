@@ -4,6 +4,7 @@
   <link rel="stylesheet" type="text/css" href="./css/reset.css">
   <link rel="stylesheet" type="text/css" href="./css/stylesheet.css">
   <link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
   <link rel="icon"
       type="image/png"
       href="./docs/images/favicon.png">
@@ -27,9 +28,16 @@
         <select id="dropdown"></select>
       </h3>
       <div id="tooltip">
-        <h3 class="year prompt">Hover Over Counties To See Poverty Level</h3>
-        <h3><span id = "neighborhood">&nbsp;</span></h3>
-        <h5><span id = "datum">&nbsp;</span></h5>
+        <h3 class="year prompt">Hover Over Map To See County Specific Poverty Levels</h3>
+        <div class="data">
+          <ul id="active-neighborhood">
+            <li> Bronx County, NY </li>
+            <li> 30.3% </li>
+          </ul>
+          <h3><span id = "neighborhood">&nbsp;</span></h3>
+          <h5><span id = "datum">&nbsp;</span></h5>
+
+        </div>
       </div>
       <p class="about-text">Using d3.js and census data, this choropleth map shows the estimated percent of people of all ages in poverty. Use the dropdown above to toggle through years to see changing demographics through time. This project examines counties with high rates of poverty. Does the percentage of people living in poverty increase over time in these counties? </p>
     </div>
@@ -179,6 +187,10 @@ const displayData = (d) => {
     .text(`${d.county}, ${d.state}`)
   d3.select("#datum")
    .text(`Poverty Rate: ${d.rate}%`);
+
+   d3.select("#active-neighborhood")
+         .selectAll("li")
+         .classed("inactive-neighborhood", true)
 }
 
 const hideData = () => {
