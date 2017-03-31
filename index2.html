@@ -210,7 +210,7 @@ const loadData = (year) => {
   let key = `rate${year}`
   d3.queue()
   .defer(d3.json, "https://d3js.org/us-10m.v1.json")
-  .defer(d3.tsv, "./data/dummydata.tsv", d => (PovertyEstimates.set(d.id, d[key]).set(`State${d.id}`, d.State).set(`County${d.id}`, d.Area_Name)))
+  .defer(d3.tsv, "./data/PovertyEstimates_all_years.tsv", d => (PovertyEstimates.set(d.id, d[key]).set(`State${d.id}`, d.State).set(`County${d.id}`, d.Area_Name)))
   .await(processData);
 
 }
