@@ -4,6 +4,7 @@
   justify-content: center;
   flex-direction: column;
   width: 100%;
+
 }
 
 .body{
@@ -14,6 +15,7 @@
   display: flex;
   margin-top: 10px;
   background: #585C6C;
+  height: 100%;
 }
 .title{
   font-size: 30px;
