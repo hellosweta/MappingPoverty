@@ -5,8 +5,8 @@
   <link rel="stylesheet" type="text/css" href="./css/stylesheet.css">
   <link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
   <div class="nav-bar">
-    <h1 class="title">Mapping Poverty in America</h1>
-    <h2 class="subtitle">Using Census Small Area Income and Poverty Estimates (SAIPE) to Show Changes in Where the Poor Live</h2>
+    <h1 class="title">Where the Poor Live </h1>
+    <h2 class="subtitle">Using Census Small Area Income and Poverty Estimates (SAIPE) to Show Changes in American Poverty Rates</h2>
   </div>
 </head>
 <body>
@@ -16,9 +16,11 @@
       <div id="map"></div>
     </div>
     <div class="about-modal">
+      <h3 class="year">Select Year
+        <select id="dropdown"></select>
+      </h3>
       <div id="tooltip">
-
-        <select id="dropdown"><h3 class="year">Year</h3></select>
+        <h3 class="year prompt">Hover Over Counties To See Poverty Level</h3>
         <h3><span id = "neighborhood">&nbsp;</span></h3>
         <h5><span id = "datum">&nbsp;</span></h5>
       </div>
@@ -27,9 +29,6 @@
   </div>
 </body>
 
-<!-- <script type="text/javascript" src="./lib/queue_func.js"> -->
-
-</script>
   <script type="text/javascript" src="./lib/d3.v4.min.js"></script>
   <script src="./lib/topojson.v2.min.js"></script>
   <script src="https://d3js.org/d3-geo.v1.min.js"></script>
@@ -44,60 +43,37 @@
 <script src="https://d3js.org/d3-transition.v1.min.js"></script>
 <script src="https://d3js.org/d3-drag.v1.min.js"></script>
 <script src="https://d3js.org/d3-zoom.v1.min.js"></script>
-  <!-- <script src="./js/main.js"></script> -->
 
 <script type="text/javascript">
 
 let width;
 let height;
-let projection;
 let path;
-let graticule;
 let svg;
 let year = 2015;
 let z;
-let active = d3.select(null);
+
 
 const init = () => {
   setMap();
   populationDropdown();
-  setZoom();
   setKey();
   loadData(year)
 }
+
 const setMap = () => {
   width = 960;
   height = 600;
   svg = d3.select("#map").append("svg")
   .attr("width", width)
   .attr("height", height)
-  .on("click", stopped, true);
-
 
 svg.append("rect")
     .attr("class", "background")
     .attr("width", width)
     .attr("height", height)
-    .on("click", reset);
 
 }
-
-const zoomed = () => {
-  console.log("zoomed");
-  z.style("stroke-width", 1.5 / d3.event.transform.k + "px");
-  z.attr("transform", d3.event.transform);
-}
-const zoom = () => {
-  d3.zoom()
-  .scaleExtent([1,8])
-  .on("zoom", zoomed)
-}
-
-const setZoom = () => {
-  z = svg.append("z")
-  svg.call(zoom)
-}
-
 
 const PovertyEstimates = d3.map();
 path = d3.geoPath();
@@ -188,7 +164,6 @@ const processData = (error, us) => {
   svg.append("path")
       .datum(topojson.mesh(us, us.objects.states, (a, b) => ( a !== b ) ))
       .attr("class", "states")
-      .on("click", clicked)
       .attr("d", path)
 
 }
@@ -213,34 +188,6 @@ const loadData = (year) => {
   .defer(d3.tsv, "./data/PovertyEstimates_all_years.tsv", d => (PovertyEstimates.set(d.id, d[key]).set(`State${d.id}`, d.State).set(`County${d.id}`, d.Area_Name)))
   .await(processData);
 
-}
-function clicked(d) {
-  if (active.node() === this) return reset();
-  active.classed("active", false);
-  active = d3.select(this).classed("active", true);
-
-  var bounds = path.bounds(d),
-      dx = bounds[1][0] - bounds[0][0],
-      dy = bounds[1][1] - bounds[0][1],
-      x = (bounds[0][0] + bounds[1][0]) / 2,
-      y = (bounds[0][1] + bounds[1][1]) / 2,
-      scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height))),
-      translate = [width / 2 - scale * x, height / 2 - scale * y];
-
-  svg.transition()
-      .duration(750)
-      // .call(zoom.translate(translate).scale(scale).event); // not in d3 v4
-      .call( zoom.transform, d3.zoomIdentity.translate(translate[0],translate[1]).scale(scale) ); // updated for d3 v4
-}
-
-function reset() {
-  active.classed("active", false);
-  active = d3.select(null);
-
-  svg.transition()
-      .duration(750)
-      // .call( zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1) ); // not in d3 v4
-      .call( zoom.transform, d3.zoomIdentity ); // updated for d3 v4
 }
 
 function stopped() {

@@ -33,7 +33,7 @@ rect.background{
   z-index: 1;
 }
 #dropdown{
-  margin: 15px 15px 15px 30px;
+  margin: 15px 15px 15px 20px;
   background: transparent;
   fill: white;
   width: 100px;
@@ -48,7 +48,7 @@ rect.background{
 }
 .about-modal{
   display: flex;
-  margin-top: 150px;
+  margin-top: 100px;
   border: 3px solid #33658A;
   padding: 10px 10px;
   width: 25%;
@@ -60,6 +60,12 @@ rect.background{
 }
 .map {
   border: 1px solid 000084;
+}
+.tick {
+  color: #fff;
+}
+g.tick{
+  fill: #fff;
 }
 
 .counties {
@@ -123,12 +129,17 @@ div.tooltip {
 }
 
 .year{
-  font-size: 17px;
+  font-size: 18px;
   font-weight: bold;
   padding: 5px 0px 0px 20px;
   font-family: 'Lora', serif;
+  margin-bottom: -16px;
 }
-
+.prompt{
+  font-size: 15px;
+  font-style: italic;
+  
+}
 #datum{
   font-size: 13px;
   padding: 0px 0px 0px 20px;
